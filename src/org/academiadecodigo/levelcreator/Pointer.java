@@ -29,7 +29,7 @@ public class Pointer extends Square {
                 break;
 
             case DOWN:
-                if (pos.y + 1 < (Grid.ROWS -1) * Grid.CELL_SIZE ) {
+                if (pos.y + 1 < (Grid.rows -1) * Grid.CELL_SIZE ) {
                     pos.y += Grid.CELL_SIZE;
                     square.translate(0, + Grid.CELL_SIZE);
                 }
@@ -43,7 +43,7 @@ public class Pointer extends Square {
                 break;
 
             case RIGHT:
-                if (pos.x + 1 < (Grid.COLS -1) * Grid.CELL_SIZE) {
+                if (pos.x + 1 < (Grid.cols -1) * Grid.CELL_SIZE) {
                     pos.x+=Grid.CELL_SIZE;
                     square.translate(+Grid.CELL_SIZE, 0);
                 }

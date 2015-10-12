@@ -6,6 +6,12 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedList;
+
 /**
  * Created by jlemos88 on 09/10/15.
  */
@@ -14,19 +20,14 @@ public class Editor implements KeyboardHandler {
     Grid g;
     Pointer pointer;
 
-
-
-
     public Editor() {
 
         g = new Grid();
         pointer = new Pointer();
         keyboard();
-
     }
 
     public void keyboard() {
-
         Keyboard k = new Keyboard(this);
 
         KeyboardEvent change = new KeyboardEvent();
@@ -53,6 +54,16 @@ public class Editor implements KeyboardHandler {
         right.setKey(KeyboardEvent.KEY_RIGHT);
         right.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
         k.addEventListener(right);
+
+        KeyboardEvent save = new KeyboardEvent();
+        save.setKey(KeyboardEvent.KEY_S);
+        save.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        k.addEventListener(save);
+
+        KeyboardEvent open = new KeyboardEvent();
+        open.setKey(KeyboardEvent.KEY_O);
+        open.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        k.addEventListener(open);
     }
 
     @Override
@@ -60,29 +71,47 @@ public class Editor implements KeyboardHandler {
         switch (e.getKey()) {
 
             case KeyboardEvent.KEY_UP:
-
                 pointer.move(Direction.UP);
                 break;
 
             case KeyboardEvent.KEY_DOWN:
-
                 pointer.move(Direction.DOWN);
                 break;
 
             case KeyboardEvent.KEY_LEFT:
-
                 pointer.move(Direction.LEFT);
                 break;
 
             case KeyboardEvent.KEY_RIGHT:
-
                 pointer.move(Direction.RIGHT);
                 break;
 
             case KeyboardEvent.KEY_SPACE:
                 mark();
-        }
+                break;
 
+            case KeyboardEvent.KEY_S:
+
+                System.out.println(symbols());
+                try {
+                    writeFile(symbols(),"doc/text.txt");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                System.out.println("File saved");
+                break;
+
+            case KeyboardEvent.KEY_O:
+                g.grid.remove();
+                try {
+                    readFileByLine("doc/text.txt");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                System.out.println("o pressed");
+                break;
+
+        }
     }
 
     @Override
@@ -103,10 +132,56 @@ public class Editor implements KeyboardHandler {
                    g.grid.get(i).square.setColor(Color.BLACK);
                    g.grid.get(i).square.draw();
                }
-
                break;
            }
         }
+    }
+
+    public String symbols() {
+
+        String line = "";
+
+        for (int i = 0; i < g.grid.size(); i++) {
+
+            if(i % (Grid.cols) == 0 && i != 0) {
+                line += "\n";
+            }
+
+            if (g.grid.get(i).marked) {
+                line += "#";
+            } else {
+                line += "o";
+            }
+
+        }
+        return line;
+    }
+
+    private static void writeFile(String message, String file) throws IOException {
+
+        // A file output stream is an output stream for writing data to a File
+        FileOutputStream writer = new FileOutputStream(file);
+
+        // Writes bytes from the specified byte array to this file output stream.
+        writer.write(message.getBytes());
+    }
+
+    private void readFileByLine(String file) throws IOException {
+
+
+        // create a new reader
+        FileReader reader = new FileReader(file);
+
+        // wrap the file reader using a buffered reader to add more functionality
+        BufferedReader bReader = new BufferedReader(reader);
+
+        g.createNewGrid(bReader);
+
+        reader.close();
+
+
+
+
     }
 
 
