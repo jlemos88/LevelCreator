@@ -28,12 +28,26 @@ public class Grid {
         cols = 20;
         rows = 20;
 
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                grid.add(new Cell(r, c));
+        for (int r = 0; r < cols; r++) {
+            for (int c = 0; c < rows; c++) {
+                grid.add(new Cell(c, r));
 
             }
         }
+    }
+
+    String getText() {
+
+        String text = "";
+
+        for (int i = 0; i < grid.size(); i++) {
+            if(i % (Grid.rows) == 0 && i != 0) {
+                text += "\n";
+            }
+                text += grid.get(i).getSymbol();
+        }
+
+        return text;
     }
 
     public void createNewGrid(BufferedReader bReader) throws IOException {
@@ -47,20 +61,23 @@ public class Grid {
         // using the buffered reader we can read lines
         while((line = bReader.readLine()) != null) {
             for (i = 0; i < line.length(); i++) {
-                if(line.charAt(i) == '#') {
-                    grid.add(new Cell(i, r));
-                    System.out.println("col " + i + " row " + r);
+
+                String symbol = String.valueOf(line.charAt(i));
+
+                if(symbol.equals("#")) {
+                    System.out.println("color1");
                     grid.get(index).marked = true;
                     grid.get(index).square.setColor(Color.DARK_GRAY);
                     grid.get(index).square.fill();
-                } else if (line.charAt(i) == 'o'){
-                    grid.add(new Cell(i, r));
+                } else if (symbol.equals("o")){
+                    System.out.println("blank");
                     grid.get(index).square.setColor(Color.BLACK);
                     grid.get(index).square.draw();
                 }
                 index++;
             }
             r++;
+            System.out.println(line);
         }
 
         cols = i;

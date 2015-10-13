@@ -15,4 +15,8 @@ public class Cell  extends Square {
         square.draw();
     }
 
+    String getSymbol() {
+        return marked ? "#" : "o";
+    }
+
 }

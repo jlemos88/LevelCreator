@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
 
 /**
  * Created by jlemos88 on 09/10/15.
@@ -60,10 +59,10 @@ public class Editor implements KeyboardHandler {
         save.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
         k.addEventListener(save);
 
-        KeyboardEvent open = new KeyboardEvent();
-        open.setKey(KeyboardEvent.KEY_O);
-        open.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-        k.addEventListener(open);
+        KeyboardEvent load = new KeyboardEvent();
+        load.setKey(KeyboardEvent.KEY_L);
+        load.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        k.addEventListener(load);
 
         KeyboardEvent clear = new KeyboardEvent();
         clear.setKey(KeyboardEvent.KEY_C);
@@ -97,17 +96,16 @@ public class Editor implements KeyboardHandler {
 
             case KeyboardEvent.KEY_S:
 
-                System.out.println(symbols());
+                System.out.println(g.getText());
                 try {
-                    writeFile(symbols(),"doc/text.txt");
+                    writeFile(g.getText(),"doc/text.txt");
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 System.out.println("File saved");
                 break;
 
-            case KeyboardEvent.KEY_O:
-                g.grid.remove();
+            case KeyboardEvent.KEY_L:
                 try {
                     readFileByLine("doc/text.txt");
                 } catch (IOException e1) {
@@ -150,50 +148,22 @@ public class Editor implements KeyboardHandler {
         }
     }
 
-    public String symbols() {
-
-        String line = "";
-
-        for (int i = 0; i < g.grid.size(); i++) {
-
-            if(i % (Grid.rows) == 0 && i != 0) {
-                line += "\n";
-            }
-
-            if (g.grid.get(i).marked) {
-                line += "#";
-            } else {
-                line += "o";
-            }
-
-        }
-        return line;
-    }
-
     private static void writeFile(String message, String file) throws IOException {
 
-        // A file output stream is an output stream for writing data to a File
         FileOutputStream writer = new FileOutputStream(file);
 
-        // Writes bytes from the specified byte array to this file output stream.
         writer.write(message.getBytes());
     }
 
     private void readFileByLine(String file) throws IOException {
 
-
-        // create a new reader
         FileReader reader = new FileReader(file);
 
-        // wrap the file reader using a buffered reader to add more functionality
         BufferedReader bReader = new BufferedReader(reader);
 
         g.createNewGrid(bReader);
 
         reader.close();
-
-
-
 
     }
 
