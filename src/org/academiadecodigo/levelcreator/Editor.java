@@ -64,6 +64,11 @@ public class Editor implements KeyboardHandler {
         open.setKey(KeyboardEvent.KEY_O);
         open.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
         k.addEventListener(open);
+
+        KeyboardEvent clear = new KeyboardEvent();
+        clear.setKey(KeyboardEvent.KEY_C);
+        clear.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+        k.addEventListener(clear);
     }
 
     @Override
@@ -110,7 +115,15 @@ public class Editor implements KeyboardHandler {
                 }
                 System.out.println("o pressed");
                 break;
-
+            
+            case KeyboardEvent.KEY_C:
+                for (int i = 0; i < g.grid.size(); i++) {
+                    g.grid.get(i).square.setColor(Color.BLACK);
+                    g.grid.get(i).square.draw();
+                    g.grid.get(i).marked = false;
+                }
+                System.out.println("Grid cleared");
+                break;
         }
     }
 
@@ -143,7 +156,7 @@ public class Editor implements KeyboardHandler {
 
         for (int i = 0; i < g.grid.size(); i++) {
 
-            if(i % (Grid.cols) == 0 && i != 0) {
+            if(i % (Grid.rows) == 0 && i != 0) {
                 line += "\n";
             }
 
